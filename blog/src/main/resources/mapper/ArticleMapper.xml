@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.violetgarden.blog.dao.ArticleDao">
+
+    <!-- 插入文章 -->
+    <insert id="update_ArticleTag_byId" parameterType="cn.violetgarden.blog.dao.Article">
+        delete from Article_Tag where article_id = #{id};
+        <if test="tags!=null and tags.size()>0">
+            INSERT INTO Article_Tag(article_id, tag_id) VALUES
+            <foreach collection="tags" item="tag" separator=",">
+                (#{id}, #{tag.id})
+            </foreach>
+        </if>
+    </insert>
+
+</mapper>
