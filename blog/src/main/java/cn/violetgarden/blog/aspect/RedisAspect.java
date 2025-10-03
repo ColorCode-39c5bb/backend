@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import cn.violetgarden.blog.controller.request_body.ArticleRequestBody;
+
 @Aspect
 @Component
 public class RedisAspect {
@@ -28,7 +30,7 @@ public class RedisAspect {
     /**
      * 拦截所有Service层的方法
      */
-    @Around("execution(public * cn.violetgarden.blog.service..*.*(..))")
+    @Around("execution(public * cn.violetgarden.blog.service.impl.*.*(..))")
     public Object aroundServiceMethod(ProceedingJoinPoint joinPoint) throws Throwable {
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         String methodName = method.getName();
@@ -39,6 +41,7 @@ public class RedisAspect {
         
         // 处理查询方法（自动缓存）
         if (CACHEABLE_PREFIXES.stream().anyMatch(methodName::startsWith)) {
+            if("get_articles".equals(methodName)) cacheKey = generateCacheKey(className, methodName, new Object[] { ((ArticleRequestBody)joinPoint.getArgs()[0]).getPage() });
             return handleCacheableMethod(joinPoint, cacheKey);
         }
         

@@ -35,9 +35,8 @@ public class ControllerView {
     private SettingService settingService;
 
     @PostMapping("/articles")
-    public ResponseBody get_article(@RequestBody ArticleRequestBody articleRequestBody) {
-        System.out.println(articleRequestBody);
-        List<Article> articles = articleService.get_article(articleRequestBody);
+    public ResponseBody get_articles(@RequestBody ArticleRequestBody articleRequestBody) {
+        List<Article> articles = articleService.get_articles(articleRequestBody);
         return new ResponseBody(true, "successed", articles, articles.isEmpty() ? 0 : articles.get(0).getItemtotal());
     }
 
@@ -48,24 +47,20 @@ public class ControllerView {
 
     @GetMapping("/profile")
     public ResponseBody getProfile(Long id) {
-        System.out.println("config");
         return new ResponseBody(true, "successed", profileService.selectById(id));
     }
     @GetMapping("/setting")
     public ResponseBody getSetting(Long id) {
-        System.out.println("config");
         return new ResponseBody(true, "successed", settingService.selectById(id));
     }
 
     @GetMapping("/tags")
     public ResponseBody selectAllTag() {
-        System.out.println("tags");
         return new ResponseBody(true, "successed", tagService.selectAll());
     }
 
     @PutMapping("/read")
     public ResponseBody read(Integer id) {
-        System.out.println("read");
         return new ResponseBody(true, "successed", articleService.update_read_byId(id));
     }
 
@@ -73,7 +68,6 @@ public class ControllerView {
 
     @PostMapping("/login")
     public ResponseBody login(@RequestBody LoginRequestBody loginRequestBody) {
-        System.out.println(loginRequestBody);
         String token = userService.login(loginRequestBody);
         if (token != null) {
             return new ResponseBody(true, "successed", token);

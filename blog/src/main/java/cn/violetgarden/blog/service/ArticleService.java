@@ -7,7 +7,7 @@ import cn.violetgarden.blog.controller.request_body.ArticleRequestBody;
 import cn.violetgarden.blog.dao.Article;
 public interface ArticleService {
 
-    public List<Article> get_article(ArticleRequestBody articleRequestBody);
+    public List<Article> get_articles(ArticleRequestBody articleRequestBody);
 
     public Article selectById(Long id);
 

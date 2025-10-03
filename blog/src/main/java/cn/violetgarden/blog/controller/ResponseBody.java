@@ -21,6 +21,12 @@ public class ResponseBody{
         this.dataExtra  = dataExtra;
     }
 
+    @Override
+    public String toString() {
+        return "ResponseBody [state=" + state + ", message=" + message + ", data=" + data + ", dataExtra=" + dataExtra
+                + "]";
+    }
+
     public boolean isState() {
         return state;
     }

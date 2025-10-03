@@ -19,11 +19,11 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleDao articleDao;
     
     @Override
-    public List<Article> get_article(ArticleRequestBody requestBody) {
+    public List<Article> get_articles(ArticleRequestBody requestBody) {
         Integer pagesize = requestBody.getPagesize(),
                 start = (requestBody.getPage() - 1) * pagesize;
 
-        return articleDao.select_article(
+        return articleDao.select_articles(
                 start, pagesize,
                 "%" + requestBody.getKeyword() + "%",
                 requestBody.getKeyword().length(),

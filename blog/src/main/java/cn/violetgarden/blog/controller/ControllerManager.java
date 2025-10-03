@@ -64,13 +64,11 @@ public class ControllerManager {
 
     @PutMapping("/api/profile")
     public ResponseBody updateProfile(@RequestBody Profile profile) {
-        System.out.println(profile);
         return new ResponseBody(true, "successed", profileService.update(profile));
     }
 
     @PutMapping("/api/setting")
     public ResponseBody updateSetting(@RequestBody Setting setting) {
-        System.out.println(setting);
         return new ResponseBody(true, "successed", settingService.update(setting));
     }
 

@@ -66,7 +66,7 @@ public interface ArticleDao {
     """)
     @Options(flushCache = Options.FlushCachePolicy.TRUE) // 保持连接
     @ResultMap("articleResultMap")  // 引用公共映射
-    public List<Article> select_article(
+    public List<Article> select_articles(
             Integer start, Integer pagesize,
             String keyword, Integer keywordLength,
             List<Tag> tags, Integer tagsLength
