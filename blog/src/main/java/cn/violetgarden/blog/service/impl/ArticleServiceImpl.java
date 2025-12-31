@@ -38,7 +38,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Integer update_read_byId(Integer article_id) {
+    public Integer increment_read_byId(Integer article_id) {
         return articleDao.update_read_byId(article_id);
     }
 

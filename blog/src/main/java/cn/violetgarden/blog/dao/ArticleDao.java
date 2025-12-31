@@ -21,10 +21,10 @@ public interface ArticleDao {
     @Results(id = "articleResultMap", value = {
         @Result(property = "id", column = "id"),
         @Result(
-                property = "tags",
-                column = "id", // 将 article_id 传递给子查询
-                javaType = List.class,
-                many = @Many(select = "cn.violetgarden.blog.dao.ArticleDao.select_tags_byArticleId")
+            property = "tags",
+            column = "id", // 将 article_id 传递给子查询
+            javaType = List.class,
+            many = @Many(select = "cn.violetgarden.blog.dao.ArticleDao.select_tags_byArticleId")
         )
     })
     @Select("SELECT * FROM Article WHERE id = #{article_id}")
@@ -67,9 +67,9 @@ public interface ArticleDao {
     @Options(flushCache = Options.FlushCachePolicy.TRUE) // 保持连接
     @ResultMap("articleResultMap")  // 引用公共映射
     public List<Article> select_articles(
-            Integer start, Integer pagesize,
-            String keyword, Integer keywordLength,
-            List<Tag> tags, Integer tagsLength
+        Integer start, Integer pagesize,
+        String keyword, Integer keywordLength,
+        List<Tag> tags, Integer tagsLength
     );
 
     @Insert("insert into Article value(null, null, null, null, 0, 0, now(), now())")

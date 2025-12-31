@@ -21,4 +21,11 @@ public class SettingServiceImpl implements SettingService{
     public Integer update(Setting setting){
         return settingDao.update(setting);
     }
+
+    @Override
+    public Integer increment_visitview() {
+        return settingDao.increment_visitview();
+    }
+    
+    
 }

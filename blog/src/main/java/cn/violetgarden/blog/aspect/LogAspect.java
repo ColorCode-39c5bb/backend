@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-public class BodyAspect {
+public class LogAspect {
     @Before("within(cn.violetgarden.blog.controller.ControllerView) || within(cn.violetgarden.blog.controller.ControllerManager)")
     public void handleControllerMethod(JoinPoint joinPoint) throws Throwable {
         System.out.println( ((MethodSignature)joinPoint.getSignature()).getMethod().getName()+": "+Arrays.toString(joinPoint.getArgs()) );

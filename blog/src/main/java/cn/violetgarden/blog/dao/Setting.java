@@ -5,6 +5,7 @@ public class Setting {
     private Long id;
 
     private Integer pagesize;
+    Integer visitview;
     // private String siteName;
     // private String siteUrl;
     // private String siteDescription;
@@ -18,13 +19,21 @@ public class Setting {
             "Setting: {\n" +
             "   id:         " + id + ",\n" +
             "   pagesize:   " + pagesize + ",\n" +
-            // "   siteName:   \"" + siteName + "\",\n" +
+            "   visitview:   \"" + visitview + "\",\n" +
             // "   siteUrl:    \"" + siteUrl + "\",\n" +
             // "   siteDescription: \"" + siteDescription + "\",\n" +
             // "   siteKeywords: \"" + siteKeywords + "\",\n" +
             // "   siteLogo:   \"" + siteLogo + "\",\n" +
             // "   siteIcp:    \"" + siteIcp + "\"\n" +
             "}";
+    }
+
+    public Setting() {
+    }
+
+    public Setting(Long id, int visitview) {
+        this.id = id;
+        this.visitview = visitview;
     }
 
     public Long getId() {
@@ -42,6 +51,15 @@ public class Setting {
     public void setPagesize(Integer pagesize) {
         this.pagesize = pagesize;
     }
+
+    public Integer getVisitview() {
+        return visitview;
+    }
+
+    public void setVisitview(Integer visitview) {
+        this.visitview = visitview;
+    }
+
 
     
 }

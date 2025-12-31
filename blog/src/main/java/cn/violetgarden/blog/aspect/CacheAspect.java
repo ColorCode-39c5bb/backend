@@ -17,19 +17,16 @@ import cn.violetgarden.blog.controller.request_body.ArticleRequestBody;
 
 @Aspect
 @Component
-public class RedisAspect {
+public class CacheAspect {
     
     private static final Set<String> CACHEABLE_PREFIXES = 
-        Set.of("find", "get", "query", "select", "list", "load");
+        Set.of("get", "select");
     private static final Set<String> EVICT_PREFIXES = 
-        Set.of("save", "update", "delete", "remove", "create", "add");
+        Set.of("update", "delete","increment");
     
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
     
-    /**
-     * 拦截所有Service层的方法
-     */
     @Around("execution(public * cn.violetgarden.blog.service.impl.*.*(..))")
     public Object aroundServiceMethod(ProceedingJoinPoint joinPoint) throws Throwable {
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
@@ -41,7 +38,7 @@ public class RedisAspect {
         
         // 处理查询方法（自动缓存）
         if (CACHEABLE_PREFIXES.stream().anyMatch(methodName::startsWith)) {
-            if("get_articles".equals(methodName)) cacheKey = generateCacheKey(className, methodName, new Object[] { ((ArticleRequestBody)joinPoint.getArgs()[0]).getPage() });
+            if("get_articles".equals(methodName)) cacheKey = generateCacheKey(className, methodName, new Object[] { ((ArticleRequestBody)joinPoint.getArgs()[0]).toString() });
             return handleCacheableMethod(joinPoint, cacheKey);
         }
         

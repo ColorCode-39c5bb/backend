@@ -11,7 +11,7 @@ public interface ArticleService {
 
     public Article selectById(Long id);
 
-    public Integer update_read_byId(Integer article_id);
+    public Integer increment_read_byId(Integer article_id);
 
     public Long insert(Article article) throws IOException;
 

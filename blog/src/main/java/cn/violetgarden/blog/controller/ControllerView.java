@@ -60,8 +60,12 @@ public class ControllerView {
     }
 
     @PutMapping("/read")
-    public ResponseBody read(Integer id) {
-        return new ResponseBody(true, "successed", articleService.update_read_byId(id));
+    public ResponseBody increment_article_read(Integer id) {
+        return new ResponseBody(true, "successed", articleService.increment_read_byId(id));
+    }
+    @PutMapping("/visit")
+    public ResponseBody increment_setting_visitview() {
+        return new ResponseBody(true, "successed", settingService.increment_visitview());
     }
 
 
