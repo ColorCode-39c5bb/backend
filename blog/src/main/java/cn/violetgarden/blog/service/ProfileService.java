@@ -1,6 +1,6 @@
 package cn.violetgarden.blog.service;
 
-import cn.violetgarden.blog.dao.Profile;
+import cn.violetgarden.blog.entity.Profile;
 
 public interface ProfileService{
 

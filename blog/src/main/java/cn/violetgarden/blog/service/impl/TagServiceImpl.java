@@ -5,28 +5,29 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.violetgarden.blog.dao.*;
+import cn.violetgarden.blog.dao.mapper.TagMapper;
+import cn.violetgarden.blog.entity.Tag;
 import cn.violetgarden.blog.service.TagService;
 
 @Service
 public class TagServiceImpl implements TagService{
 
     @Autowired
-    private TagDao tagDao;
+    private TagMapper tagMapper;
 
     @Override
     public List<Tag> selectAll(){
-        return tagDao.selectAll();
+        return tagMapper.selectAll();
     }
 
     @Override
     public Integer insert(Tag tag){
-        tagDao.insert(tag);
-        return tagDao.get_IdLastInsert();
+        tagMapper.insert(tag);
+        return tagMapper.get_IdLastInsert();
     }
 
     @Override
     public Integer delete(Integer id){
-        return tagDao.delete(id);
+        return tagMapper.delete(id);
     }
 }

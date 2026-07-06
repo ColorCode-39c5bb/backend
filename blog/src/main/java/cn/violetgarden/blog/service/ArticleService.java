@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import cn.violetgarden.blog.controller.request_body.ArticleRequestBody;
-import cn.violetgarden.blog.dao.Article;
+import cn.violetgarden.blog.entity.Article;
 public interface ArticleService {
 
     public List<Article> get_articles(ArticleRequestBody articleRequestBody);

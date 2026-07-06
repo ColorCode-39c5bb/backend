@@ -9,21 +9,22 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import cn.violetgarden.blog.controller.request_body.ArticleRequestBody;
-import cn.violetgarden.blog.dao.*;
+import cn.violetgarden.blog.dao.mapper.ArticleMapper;
+import cn.violetgarden.blog.entity.Article;
 import cn.violetgarden.blog.service.ArticleService;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
-    private ArticleDao articleDao;
+    private ArticleMapper articleMapper;
     
     @Override
     public List<Article> get_articles(ArticleRequestBody requestBody) {
         Integer pagesize = requestBody.getPagesize(),
                 start = (requestBody.getPage() - 1) * pagesize;
 
-        return articleDao.select_articles(
+        return articleMapper.select_articles(
                 start, pagesize,
                 "%" + requestBody.getKeyword() + "%",
                 requestBody.getKeyword().length(),
@@ -34,18 +35,18 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article selectById(Long id) {
-        return articleDao.selectById(id);
+        return articleMapper.selectById(id);
     }
 
     @Override
     public Integer increment_read_byId(Integer article_id) {
-        return articleDao.update_read_byId(article_id);
+        return articleMapper.update_read_byId(article_id);
     }
 
     @Override
     public Long insert(Article article) {
-        articleDao.insert(article);
-        Long idLastInsert = articleDao.get_IdLastInsert();
+        articleMapper.insert(article);
+        Long idLastInsert = articleMapper.get_IdLastInsert();
         article.setId(idLastInsert);
         try {
             update(article);
@@ -65,14 +66,14 @@ public class ArticleServiceImpl implements ArticleService {
             article.getCoverFile().transferTo(new File(new ClassPathResource("static").getFile().getAbsolutePath() + "/" + filename));
             article.setCover(filename);
         }
-        articleDao.update(article);
-        return articleDao.update_ArticleTag_byId(article.getId(), article.getTags());
+        articleMapper.update(article);
+        return articleMapper.update_ArticleTag_byId(article.getId(), article.getTags());
     }
 
     @Override
     public Integer delete(Article article) {
         delete_cover(article);
-        return articleDao.deleteById(article.getId());
+        return articleMapper.deleteById(article.getId());
     }
 
     private boolean delete_cover(Article article) {

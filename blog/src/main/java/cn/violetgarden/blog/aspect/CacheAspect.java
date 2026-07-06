@@ -5,10 +5,10 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Set;
 
-import org.aspectj.lang.reflect.MethodSignature;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class CacheAspect {
     private static final Set<String> CACHEABLE_PREFIXES = 
         Set.of("get", "select");
     private static final Set<String> EVICT_PREFIXES = 
-        Set.of("update", "delete","increment");
+        Set.of("update", "delete", "increment");
     
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;

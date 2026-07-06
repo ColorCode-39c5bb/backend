@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.violetgarden.blog.controller.request_body.LoginRequestBody;
-import cn.violetgarden.blog.dao.*;
+import cn.violetgarden.blog.dao.mapper.UserMapper;
+import cn.violetgarden.blog.entity.User;
 import cn.violetgarden.blog.service.UserService;
 import io.jsonwebtoken.Jwts;
 
@@ -17,13 +18,13 @@ import io.jsonwebtoken.Jwts;
 public class UserServiceImpl implements UserService{
 
     @Autowired
-    private UserDao userDao;
+    private UserMapper userMapper;
 
     @Override
     public List<User> selectAll(){
         //验证是否为管理员
         
-        return userDao.selectAll();
+        return userMapper.selectAll();
     }
 
     //登录验证
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService{
     public String login(LoginRequestBody loginRequestBody) {
         String username = loginRequestBody.getUsername();
         String password = loginRequestBody.getPassword();
-        User user = userDao.selectByUsername(username);
+        User user = userMapper.selectByUsername(username);
         if (user == null || !user.getPassword().equals(password)) return null;
         
         Map<String, Object> body = new HashMap<>();

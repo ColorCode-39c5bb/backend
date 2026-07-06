@@ -2,7 +2,7 @@ package cn.violetgarden.blog.controller.request_body;
 
 import java.util.List;
 
-import cn.violetgarden.blog.dao.Tag;
+import cn.violetgarden.blog.entity.Tag;
 
 public class ArticleRequestBody{
     private Integer page;

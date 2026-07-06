@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh" >
+<head>
+    <meta charset="UTF-8">
+	<title>Happy Birthday!</title>
+    <link rel="stylesheet" href="style.css">
+	<script type="module" src="script/movingEmitter.js"></script>
+	<script type="module" src="script/fixedEmitter.js"></script>
+	<script type="importmap">{
+		"imports": {
+			"three": "https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.module.js",
+			"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.149.0/examples/jsm/"
+		}
+	}</script>
+	<script type="module" src="script/cake.js"></script>
+<script>
+	document.addEventListener('contextmenu', (e)=>e.preventDefault());
+</script>
+</head>
+<body style="overflow: hidden;">
+	<canvas></canvas>
+	<div class="pyro">
+        <div class="before"></div>
+        <div class="after"></div>
+    </div>
+    <h1>[Xie-Ruyu]</h1>
+    <h2>-Happy-Birthday!-</h2>
+</body>
+</html>
+

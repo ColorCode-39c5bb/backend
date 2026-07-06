@@ -1,13 +1,13 @@
 package cn.violetgarden.blog.service;
 
+import static io.jsonwebtoken.SignatureAlgorithm.HS256;
+
 import java.util.List;
 
 import javax.crypto.SecretKey;
 
 import cn.violetgarden.blog.controller.request_body.LoginRequestBody;
-import cn.violetgarden.blog.dao.User;
-
-import static io.jsonwebtoken.SignatureAlgorithm.HS256;
+import cn.violetgarden.blog.entity.User;
 import io.jsonwebtoken.security.Keys;
 
 public interface UserService{

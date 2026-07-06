@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cn.violetgarden.blog.controller.request_body.ArticleRequestBody;
 import cn.violetgarden.blog.controller.request_body.LoginRequestBody;
-import cn.violetgarden.blog.dao.Article;
+import cn.violetgarden.blog.entity.Article;
 import cn.violetgarden.blog.service.ArticleService;
 import cn.violetgarden.blog.service.ProfileService;
 import cn.violetgarden.blog.service.SettingService;
