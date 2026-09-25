@@ -3,7 +3,7 @@ package cn.violetgarden.blog.controller.filters;
 
 import java.io.IOException;
 
-import cn.violetgarden.blog.service.UserService;
+import cn.violetgarden.blog.service.mysql.UserService;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;

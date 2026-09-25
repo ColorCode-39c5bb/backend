@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:mvc="http://www.springframework.org/schema/mvc"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+			https://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/context
+			https://www.springframework.org/schema/context/spring-context.xsd
+			http://www.springframework.org/schema/mvc
+			https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    
+	<context:component-scan base-package="cn.violetgarden.blog">
+		<context:exclude-filter type="aspectj" expression="cn.violetgarden.blog.controller..*"/>
+		<context:exclude-filter type="aspectj" expression="cn.violetgarden.blog.service..*"/>
+	</context:component-scan>
+
+	<beans profile="mysql">
+		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+			<property name="dataSource" ref="dataSource"/>
+			<!-- 指定MyBatis映射文件的位置 -->
+			<property name="mapperLocations" value="classpath:mapper/mysql/*.xml"/>
+			<!-- 配置类型别名 -->
+			<property name="typeAliasesPackage" value="cn.violetgarden.blog.entity.mysql"/>
+		</bean>
+		<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+			<property name="jndiName" value="java:comp/env/blog/mysql"/>
+		</bean>
+		<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		    <property name="basePackage" value="cn.violetgarden.blog.dao.mapper.mysql"/>
+		</bean>
+		<context:component-scan base-package="cn.violetgarden.blog.service.mysql"></context:component-scan>
+	</beans>
+
+	<beans profile="postgresql">
+		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+			<property name="dataSource" ref="dataSource"/>
+			<!-- 配置类型别名 -->
+			<property name="typeAliasesPackage" value="cn.violetgarden.blog.entity.postgresql"/>
+		</bean>
+		<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+			<property name="jndiName" value="java:comp/env/blog/postgresql"/>
+		</bean>
+		<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		    <property name="basePackage" value="cn.violetgarden.blog.dao.mapper.postgresql"/>
+		</bean>
+		<context:component-scan base-package="cn.violetgarden.blog.service.postgresql"></context:component-scan>
+	</beans>
+</beans>
