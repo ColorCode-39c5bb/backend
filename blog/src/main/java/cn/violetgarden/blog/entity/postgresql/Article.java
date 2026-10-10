@@ -11,6 +11,7 @@ public class Article {
     private String create_date;
     private String update_date;
 
+	private String[] tags;
 	@Override
 	public String toString(){ return String.format(
 """
@@ -25,9 +26,16 @@ Article{
 	create_date='%s',
 	update_date='%s'
 }
-""",
-		id, account_number, title, content, cover, read, like, create_date, update_date
+""", id, account_number, title, content, cover, read, like, create_date, update_date
 	);}
+
+	public String[] getTags() {
+		return tags;
+	}
+
+	public void setTags(String[] tags) {
+		this.tags = tags;
+	}
 
 	public Long getId() {
 		return id;

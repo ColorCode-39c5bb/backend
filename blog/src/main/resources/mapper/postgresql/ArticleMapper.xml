@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.violetgarden.blog.dao.mapper.postgresql.ArticleMapper">
+<select id="select_article_all" parameterType="cn.violetgarden.blog.controller.request_body.ArticleRequestBody">
+SELECT * FROM association."Article_Tag" WHERE tag_name IN <foreach collection="tags" item="tag" open="(" close=")" separator=",">#{tag}</foreach>
+</select>
+</mapper>

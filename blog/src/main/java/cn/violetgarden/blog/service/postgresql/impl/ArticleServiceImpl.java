@@ -3,6 +3,7 @@ package cn.violetgarden.blog.service.postgresql.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.violetgarden.blog.controller.request_body.ArticleRequestBody;
 import cn.violetgarden.blog.dao.mapper.postgresql.ArticleMapper;
 import cn.violetgarden.blog.entity.postgresql.Article;
 import cn.violetgarden.blog.service.postgresql.ArticleService;
@@ -14,7 +15,11 @@ public class ArticleServiceImpl implements ArticleService{
 
 	@Override
 	public Article get_article(Long id) {
-		System.out.println("get_article: "+id);
-		return articleMapper.select_article_by_id(id);
+		return articleMapper.select_by_id(id);
+	}
+
+	@Override
+	public Article[] get_articles(ArticleRequestBody arb) {
+		return articleMapper.select_all(arb);
 	}
 }
