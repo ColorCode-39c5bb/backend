@@ -8,7 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.violetgarden.blog.controller.request_body.LoginRequestBody;
+import cn.violetgarden.blog.controller.mysql.requestbody.LoginRequestBody;
 import cn.violetgarden.blog.dao.mapper.mysql.UserMapper;
 import cn.violetgarden.blog.entity.mysql.User;
 import cn.violetgarden.blog.service.mysql.UserService;

@@ -34,12 +34,14 @@
 
 	<beans profile="postgresql">
 		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-			<property name="dataSource" ref="dataSource"/>
-			<!-- 配置类型别名 -->
-			<property name="typeAliasesPackage" value="cn.violetgarden.blog.entity.postgresql"/>
-		</bean>
-		<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-			<property name="jndiName" value="java:comp/env/blog/postgresql"/>
+			<property name="dataSource">
+				<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+					<property name="jndiName" value="java:comp/env/blog/postgresql"/>
+				</bean>
+			</property>
+			<property name="configuration">
+				<bean class="cn.violetgarden.blog.dao.mapper.postgresql.association.Configuration_GenericHandler"></bean>
+			</property>
 		</bean>
 		<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		    <property name="basePackage" value="cn.violetgarden.blog.dao.mapper.postgresql"/>

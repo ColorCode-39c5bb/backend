@@ -1,17 +1,22 @@
 package cn.violetgarden.blog.entity.postgresql;
 
+import java.sql.Date;
+import java.util.List;
+
+import cn.violetgarden.blog.dao.mapper.postgresql.association.PrimaryKey;
+
 public class Article {
-    private Long id;
+    @PrimaryKey("id") private Long id;
 	private String account_number;
     private String title;
     private String content;
     private String cover;
     private Long read;
     private Long like;
-    private String create_date;
-    private String update_date;
+    private Date date_create;
+    private Date date_update;
 
-	private String[] tags;
+	private Tag[] tags;
 	@Override
 	public String toString(){ return String.format(
 """
@@ -26,14 +31,30 @@ Article{
 	create_date='%s',
 	update_date='%s'
 }
-""", id, account_number, title, content, cover, read, like, create_date, update_date
-	);}
+"""
+	, id, account_number, title, content, cover, read, like, date_create, date_update);}
 
-	public String[] getTags() {
+	public Date getDate_create() {
+		return date_create;
+	}
+
+	public void setDate_create(Date date_create) {
+		this.date_create = date_create;
+	}
+
+	public Date getDate_update() {
+		return date_update;
+	}
+
+	public void setDate_update(Date date_update) {
+		this.date_update = date_update;
+	}
+
+	public Tag[] getTags() {
 		return tags;
 	}
 
-	public void setTags(String[] tags) {
+	public void setTags(Tag[] tags) {
 		this.tags = tags;
 	}
 
@@ -93,19 +114,4 @@ Article{
 		this.like = like;
 	}
 
-	public String getCreate_date() {
-		return create_date;
-	}
-
-	public void setCreate_date(String create_date) {
-		this.create_date = create_date;
-	}
-
-	public String getUpdate_date() {
-		return update_date;
-	}
-
-	public void setUpdate_date(String update_date) {
-		this.update_date = update_date;
-	}
 }

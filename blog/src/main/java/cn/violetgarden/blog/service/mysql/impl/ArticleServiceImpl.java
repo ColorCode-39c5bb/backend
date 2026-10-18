@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import cn.violetgarden.blog.controller.request_body.ArticleRequestBody;
+import cn.violetgarden.blog.controller.mysql.requestbody.ArticleRequestBody;
 import cn.violetgarden.blog.dao.mapper.mysql.ArticleMapper;
 import cn.violetgarden.blog.entity.mysql.Article;
 import cn.violetgarden.blog.service.mysql.ArticleService;

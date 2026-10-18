@@ -1,4 +1,4 @@
-package cn.violetgarden.blog.controller.request_body;
+package cn.violetgarden.blog.controller.mysql.requestbody;
 
 import java.util.List;
 

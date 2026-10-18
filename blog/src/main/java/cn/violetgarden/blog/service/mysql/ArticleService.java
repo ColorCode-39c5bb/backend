@@ -3,7 +3,7 @@ package cn.violetgarden.blog.service.mysql;
 import java.io.IOException;
 import java.util.List;
 
-import cn.violetgarden.blog.controller.request_body.ArticleRequestBody;
+import cn.violetgarden.blog.controller.mysql.requestbody.ArticleRequestBody;
 import cn.violetgarden.blog.entity.mysql.Article;
 public interface ArticleService {
 

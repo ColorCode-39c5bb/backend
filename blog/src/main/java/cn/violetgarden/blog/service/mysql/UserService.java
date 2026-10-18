@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.crypto.SecretKey;
 
-import cn.violetgarden.blog.controller.request_body.LoginRequestBody;
+import cn.violetgarden.blog.controller.mysql.requestbody.LoginRequestBody;
 import cn.violetgarden.blog.entity.mysql.User;
 import io.jsonwebtoken.security.Keys;
 

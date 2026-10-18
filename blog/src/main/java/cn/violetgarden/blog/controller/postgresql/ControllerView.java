@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.violetgarden.blog.controller.request_body.ArticleRequestBody;
+import cn.violetgarden.blog.controller.postgresql.requestbody.ArticleRequestBody;
 import cn.violetgarden.blog.entity.postgresql.Account;
 import cn.violetgarden.blog.entity.postgresql.Article;
 import cn.violetgarden.blog.entity.postgresql.Tag;

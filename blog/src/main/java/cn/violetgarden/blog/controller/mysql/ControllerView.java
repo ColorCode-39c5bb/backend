@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.violetgarden.blog.controller.ResponseBody;
-import cn.violetgarden.blog.controller.request_body.ArticleRequestBody;
-import cn.violetgarden.blog.controller.request_body.LoginRequestBody;
+import cn.violetgarden.blog.controller.mysql.requestbody.ArticleRequestBody;
+import cn.violetgarden.blog.controller.mysql.requestbody.LoginRequestBody;
 import cn.violetgarden.blog.entity.mysql.Article;
 import cn.violetgarden.blog.service.mysql.ArticleService;
 import cn.violetgarden.blog.service.mysql.ProfileService;

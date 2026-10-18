@@ -13,8 +13,8 @@ Account{
 	profile=%s,
 	nick='%s'
 }
-""", number, profile, nick
-	);}
+"""
+	, number, profile, nick);}
 
 	public String getNumber() {
 		return number;

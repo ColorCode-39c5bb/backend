@@ -1,4 +1,4 @@
-package cn.violetgarden.blog.controller.request_body;
+package cn.violetgarden.blog.controller.mysql.requestbody;
 
 public class LoginRequestBody{
     private String username;
