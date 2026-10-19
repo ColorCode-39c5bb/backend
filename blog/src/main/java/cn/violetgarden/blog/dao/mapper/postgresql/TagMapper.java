@@ -12,11 +12,4 @@ public interface TagMapper {
 SELECT * FROM public."Tag"
 """)
 Tag[] select_all();
-
-Map<String, Object>[] select_by_articles(Long[] articleids);
-//{
-//	article_id: Long,
-//	tag_name: String,
-//	...Tag
-//}
 }

@@ -4,8 +4,9 @@ import java.sql.Date;
 
 import cn.violetgarden.blog.dao.mapper.postgresql.association.PrimaryKey;
 
+@PrimaryKey("id") 
 public class Article {
-    @PrimaryKey("id") private Long id;
+    public Long id;
 	private String account_number;
     private String title;
     private String content;
@@ -29,9 +30,10 @@ Article{
 	like=%d,
 	create_date='%s',
 	update_date='%s'
+	tags=%s
 }
 """
-	, id, account_number, title, content, cover, read, like, date_create, date_update);}
+	, id, account_number, title, content, cover, read, like, date_create, date_update, tags);}
 
 	public Date getDate_create() {
 		return date_create;
