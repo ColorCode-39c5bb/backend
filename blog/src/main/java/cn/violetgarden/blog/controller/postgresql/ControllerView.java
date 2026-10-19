@@ -36,7 +36,7 @@ public class ControllerView {
 	}
 
 	@PutMapping("/articles")
-	public Article[] put_articles(@RequestBody ArticleRequestBody arb){
+	public Article[] put_articles(@RequestBody ArticleRequestBody arb) throws NoSuchFieldException, IllegalAccessException{
 		return articleService.get_articles(arb);
 	}
 

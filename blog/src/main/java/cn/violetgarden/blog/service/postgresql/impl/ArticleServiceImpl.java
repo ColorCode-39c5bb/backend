@@ -1,5 +1,6 @@
 package cn.violetgarden.blog.service.postgresql.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,12 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
-	public Article[] get_articles(ArticleRequestBody arb) {
+	public Article[] get_articles(ArticleRequestBody arb) throws NoSuchFieldException, IllegalAccessException {
 		Article[] articles = articleMapper.select_all(arb);
 		if(articles.length==0) return articles;
-		Map<Article,Tag[]>[] maps = article_tag_mapper.select_by_c0_cartesianproduct(articles);
-		for(Map<Article, Tag[]> map : maps) map.forEach((article, tags) -> article.setTags(tags));
+		Map<Article, List<Tag>> maps = article_tag_mapper.select_by_c0_manualassembly(articles);
+		maps.forEach((a, ts)->System.out.println(a+"."+ts));
+		maps.forEach((article, tags) -> article.setTags(tags.toArray(new Tag[0])));
 		return articles;
 	}
 }

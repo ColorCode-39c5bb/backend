@@ -1,7 +1,6 @@
 package cn.violetgarden.blog.entity.postgresql;
 
 import java.sql.Date;
-import java.util.List;
 
 import cn.violetgarden.blog.dao.mapper.postgresql.association.PrimaryKey;
 
