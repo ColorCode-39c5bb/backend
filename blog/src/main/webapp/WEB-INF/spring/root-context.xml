@@ -39,6 +39,9 @@
 					<property name="jndiName" value="java:comp/env/blog/postgresql"/>
 				</bean>
 			</property>
+			<property name="plugins"><array>
+				<bean class="cn.violetgarden.blog.dao.mapper.postgresql.association.AssociationMapper$Interceptor_AssociationMapper"></bean>
+			</array></property>
 		</bean>
 		<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		    <property name="basePackage" value="cn.violetgarden.blog.dao.mapper.postgresql"/>
