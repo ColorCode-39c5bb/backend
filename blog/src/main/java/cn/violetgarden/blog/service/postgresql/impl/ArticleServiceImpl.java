@@ -29,7 +29,7 @@ public class ArticleServiceImpl implements ArticleService{
 	public Article[] get_articles(ArticleRequestBody arb) throws NoSuchFieldException, IllegalAccessException {
 		Article[] articles = articleMapper.select_all(arb);
 		if(articles.length==0) return articles;
-		Map<Article, List<Tag>> maps = article_tag_mapper.select_by_c0_manualassembly(articles);
+		Map<Article, List<Tag>> maps = article_tag_mapper.select_by(Article.class, articles);
 		maps.forEach((article, tags) -> article.setTags(tags.toArray(new Tag[0])));
 		return articles;
 	}

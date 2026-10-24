@@ -1,6 +1,6 @@
 package cn.violetgarden.blog.entity.postgresql.association;
 
-import cn.violetgarden.blog.dao.mapper.postgresql.association.PrimaryKey;
+import cn.violetgarden.blog.entity.postgresql.annotation.PrimaryKey;
 
 public class Article_Tag {
 	public Long article_id;
@@ -25,5 +25,5 @@ public class Article_Tag {
 		this.tag_name = tag_name;
 	}
 
-	
+
 }

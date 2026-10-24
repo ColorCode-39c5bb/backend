@@ -1,7 +1,5 @@
 package cn.violetgarden.blog.dao.mapper.postgresql;
 
-import java.util.Map;
-
 import org.apache.ibatis.annotations.Select;
 
 import cn.violetgarden.blog.entity.postgresql.Tag;

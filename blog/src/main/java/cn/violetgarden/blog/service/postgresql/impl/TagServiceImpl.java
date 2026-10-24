@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import cn.violetgarden.blog.dao.mapper.postgresql.TagMapper;
 import cn.violetgarden.blog.dao.mapper.postgresql.association.Article_Tag_Mapper;
+import cn.violetgarden.blog.entity.mysql.Article;
 import cn.violetgarden.blog.entity.postgresql.Tag;
 import cn.violetgarden.blog.service.postgresql.TagService;
 
@@ -18,4 +19,11 @@ public class TagServiceImpl implements TagService {
 	public Tag[] get_tags() {
 		return tagMapper.select_all();
 	}
+	@Override
+	public Tag[] get_tags(Article[] articles) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }

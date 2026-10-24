@@ -1,10 +1,11 @@
 package cn.violetgarden.blog.entity.postgresql;
 
-import cn.violetgarden.blog.dao.mapper.postgresql.association.PrimaryKey;
+import cn.violetgarden.blog.entity.postgresql.annotation.AssociationKey;
+import cn.violetgarden.blog.entity.postgresql.annotation.PrimaryKey;
 @PrimaryKey("name")
 public class Tag {
     public String name;
-	private Article[] articles;
+	@AssociationKey private Article[] articles;
 
 	@Override
 	public String toString(){ return String.format(
@@ -15,6 +16,25 @@ Tag{
 }
 """
 	, name, articles);}
+
+
+
+	public Tag() {}
+
+
+
+	public Tag(String name) {
+		this.name = name;
+	}
+
+
+
+	public Tag(String name, Article[] articles) {
+		this.name = name;
+		this.articles = articles;
+	}
+
+
 
 	public String getName() {
 		return name;
@@ -32,6 +52,6 @@ Tag{
 		this.articles = articles;
 	}
 
-	
-	
+
+
 }

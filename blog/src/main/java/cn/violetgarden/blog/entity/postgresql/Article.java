@@ -2,9 +2,10 @@ package cn.violetgarden.blog.entity.postgresql;
 
 import java.sql.Date;
 
-import cn.violetgarden.blog.dao.mapper.postgresql.association.PrimaryKey;
+import cn.violetgarden.blog.entity.postgresql.annotation.AssociationKey;
+import cn.violetgarden.blog.entity.postgresql.annotation.PrimaryKey;
 
-@PrimaryKey("id") 
+@PrimaryKey("id")
 public class Article {
     public Long id;
 	private String account_number;
@@ -16,7 +17,7 @@ public class Article {
     private Date date_create;
     private Date date_update;
 
-	private Tag[] tags;
+	@AssociationKey private Tag[] tags;
 	@Override
 	public String toString(){ return String.format(
 """
@@ -34,6 +35,38 @@ Article{
 }
 """
 	, id, account_number, title, content, cover, read, like, date_create, date_update, tags);}
+
+
+	public Article() {}
+
+
+	public Article(Long id, String account_number, String title, String content, String cover, Long read, Long like,
+			Date date_create, Date date_update) {
+		this.id = id;
+		this.account_number = account_number;
+		this.title = title;
+		this.content = content;
+		this.cover = cover;
+		this.read = read;
+		this.like = like;
+		this.date_create = date_create;
+		this.date_update = date_update;
+	}
+	public Article(Long id, String account_number, String title, String content, String cover, Long read, Long like,
+			Date date_create, Date date_update, Tag[] tags) {
+		this.id = id;
+		this.account_number = account_number;
+		this.title = title;
+		this.content = content;
+		this.cover = cover;
+		this.read = read;
+		this.like = like;
+		this.date_create = date_create;
+		this.date_update = date_update;
+		this.tags = tags;
+	}
+
+
 
 	public Date getDate_create() {
 		return date_create;

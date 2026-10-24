@@ -9,7 +9,7 @@
 			https://www.springframework.org/schema/context/spring-context.xsd
 			http://www.springframework.org/schema/mvc
 			https://www.springframework.org/schema/mvc/spring-mvc.xsd">
-    
+
 	<context:component-scan base-package="cn.violetgarden.blog">
 		<context:exclude-filter type="aspectj" expression="cn.violetgarden.blog.controller..*"/>
 		<context:exclude-filter type="aspectj" expression="cn.violetgarden.blog.service..*"/>
@@ -39,9 +39,6 @@
 					<property name="jndiName" value="java:comp/env/blog/postgresql"/>
 				</bean>
 			</property>
-			<property name="plugins"><array>
-				<bean class="cn.violetgarden.blog.dao.mapper.postgresql.association.AssociationMapper$Interceptor_AssociationMapper"></bean>
-			</array></property>
 		</bean>
 		<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		    <property name="basePackage" value="cn.violetgarden.blog.dao.mapper.postgresql"/>

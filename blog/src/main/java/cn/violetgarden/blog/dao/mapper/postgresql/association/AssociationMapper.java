@@ -1,10 +1,9 @@
 package cn.violetgarden.blog.dao.mapper.postgresql.association;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,55 +12,51 @@ import java.util.stream.Stream;
 
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.builder.annotation.ProviderContext;
-import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.plugin.Intercepts;
-import org.apache.ibatis.plugin.Invocation;
-import org.apache.ibatis.plugin.Signature;
-import org.apache.ibatis.session.ResultHandler;
-import org.apache.ibatis.session.RowBounds;
+import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
+import org.apache.ibatis.reflection.factory.ObjectFactory;
 
-public interface AssociationMapper<C0, C1, C2> {
+import cn.violetgarden.blog.entity.postgresql.annotation.AssociationKey;
+import cn.violetgarden.blog.entity.postgresql.annotation.PrimaryKey;
+
+public interface AssociationMapper<E0, E1, E2> {
 @SelectProvider(type=SQLProvider.class, method="select_association_by")
-Object[] select_association_by(Class<?> c, Object[] cs);
+public <R, T> E2[] select_association_by(Class<T> c, T[] t);
+@SelectProvider(type=SQLProvider.class, method="select_entity_by")
+public List<Map<String, Object>> select_entity_by(Class<?> c, Object[] t);
 
-@SelectProvider(type=SQLProvider.class, method="select_association_by_c0")
-C2[] select_association_by_c0(C0[] s);
-@SelectProvider(type=SQLProvider.class, method="select_association_by_c1")
-C2[] select_association_by_c1(C1[] s);
+static ObjectFactory factory = new DefaultObjectFactory();
+static Map<Class<?>, Type[]> cache_generic = new HashMap<>();
+default <R, T> Map<T, List<R>> select_by(Class<T> c, T[] t) throws NoSuchFieldException, IllegalAccessException{
+	E2[] e2s = select_association_by(c, t);
+	Class<?>[] cs = (Class<?>[])cache_generic.get(Stream.of(this.getClass().getInterfaces()).filter(i->cache_generic.get(i)!=null).findFirst().get());
 
-@SelectProvider(type=SQLProvider.class, method="select_by_c0")
-C1[] select_by_c0(C0[] s);
-@SelectProvider(type=SQLProvider.class, method="select_by_c1")
-C0[] select_by_c1(C1[] s);
-
-default Map<C0, List<C1>> select_by_c0_manualassembly(C0[] c0s) throws NoSuchFieldException, IllegalAccessException{
-	C2[] c2s = select_association_by_c0(c0s);
-	C1[] c1s = select_by_c0(c0s);
-	Map<Object, C1> pk_c1 = Stream.of(c1s).collect(Collectors.toMap(AssociationMapper::getPrimaryKeyValue, i->i));
-	Map<Object, C0> pk_c0 = Stream.of(c0s).collect(Collectors.toMap(AssociationMapper::getPrimaryKeyValue, i->i));
-	Map<C0, List<C1>> r = Stream.of(c0s).collect(Collectors.toMap(c0->c0, c0->new ArrayList<C1>()));
-	for(C2 c2 : c2s) r.get(pk_c0.get(c2.getClass().getDeclaredFields()[0].get(c2))).add(pk_c1.get(c2.getClass().getDeclaredFields()[1].get(c2)));
-	return r;
-};
-default Map<C1, List<C0>> select_by_c1_manualassembly(C1[] c1s) throws NoSuchFieldException, IllegalAccessException {
-	C2[] c2s = select_association_by_c1(c1s);
-	C0[] c0s = select_by_c1(c1s);
-	Map<Object, C0> pk_c0 = Stream.of(c0s).collect(Collectors.toMap(AssociationMapper::getPrimaryKeyValue, i->i));
-	Map<Object, C1> pk_c1 = Stream.of(c1s).collect(Collectors.toMap(AssociationMapper::getPrimaryKeyValue, i->i));
-	Map<C1, List<C0>> r = Stream.of(c1s).collect(Collectors.toMap(c1->c1, c1->new ArrayList<C0>()));
-	for(C2 c2 : c2s) r.get(pk_c1.get(c2.getClass().getDeclaredFields()[1].get(c2))).add(pk_c0.get(c2.getClass().getDeclaredFields()[0].get(c2)));
-	return r;
-};
+	Object[] r = null;
+	if(c==cs[0]) r=select_entity_by(c, t).stream()
+		.map(map->factory.create(
+			cs[1],
+			Stream.of(cs[1].getDeclaredFields()).filter(filed->filed.getAnnotation(AssociationKey.class)==null).<Class<?>>map(filed->filed.getType()).toList(),
+			List.copyOf(map.values())
+		)).toArray();
+	else r=select_entity_by(c, t).stream()
+		.map(map->factory.create(
+			cs[0],
+			Stream.of(cs[0].getDeclaredFields()).filter(filed->filed.getAnnotation(AssociationKey.class)==null).<Class<?>>map(filed->filed.getType()).toList(),
+			List.copyOf(map.values())
+		)).toArray();
+	Map<Object, T> pk0 = Stream.of(t).collect(Collectors.toMap(AssociationMapper::getPrimaryKeyValue, i->i));
+	Map<Object, R> pk1 = Stream.of((R[])r).collect(Collectors.toMap(AssociationMapper::getPrimaryKeyValue, i->i));
+	Map<T, List<R>> retult = Stream.of(t).collect(Collectors.toMap(k->k, v->new ArrayList<R>()));
+	for(E2 e2 : e2s) retult.get(pk0.get(e2.getClass().getDeclaredFields()[0].get(e2))).add(pk1.get(e2.getClass().getDeclaredFields()[1].get(e2)));
+	return retult;
+}
 
 static Map<Class<?>, Field> cache = new HashMap<>();
-private static Object getPrimaryKeyValue(Object obj){
+private static Object getPrimaryKeyValue(Object entity){
 	try {
-		if(cache.containsKey(obj.getClass())) return cache.get(obj.getClass()).get(obj);
-		Field pk = obj.getClass().getDeclaredField(obj.getClass().getAnnotation(PrimaryKey.class).value());
-		cache.put(obj.getClass(), pk);
-		return pk.get(obj);
+		if(cache.containsKey(entity.getClass())) return cache.get(entity.getClass()).get(entity);
+		Field pk = entity.getClass().getDeclaredField(entity.getClass().getAnnotation(PrimaryKey.class).value());
+		cache.put(entity.getClass(), pk);
+		return pk.get(entity);
 	} catch (NoSuchFieldException | IllegalAccessException e) {
 		e.printStackTrace();
 		return null;
@@ -69,98 +64,53 @@ private static Object getPrimaryKeyValue(Object obj){
 }
 
 public static class SQLProvider{
-//public static final SQLProvider cache_provider = new SQLProvider();
-public static String select_association_by(ProviderContext context, Class<?> clz_real){
-	Class<?>[] c = Stream.of(((ParameterizedType)Stream.of(context.getMapperType().getGenericInterfaces()).filter(type->type instanceof ParameterizedType&&((ParameterizedType)type).getRawType()==AssociationMapper.class).findFirst().get()).getActualTypeArguments()).map(t->(Class<?>)t).toArray(Class<?>[]::new);
-	if(clz_real == c[0]) return SQLProvider.select_association_by_c0(context);
-	else return SQLProvider.select_association_by_c1(context);
-}
-public static String select_association_by_c0(ProviderContext context){
-	Class<?>[] c = Stream.of(((ParameterizedType)Stream.of(context.getMapperType().getGenericInterfaces()).filter(type->type instanceof ParameterizedType&&((ParameterizedType)type).getRawType()==AssociationMapper.class).findFirst().get()).getActualTypeArguments()).map(t->(Class<?>)t).toArray(Class<?>[]::new);
-	return String.format("<script>%s</script>", String.format("""
-		SELECT * FROM %s WHERE %s IN <foreach collection="s" item="i" open="(" close=")" separator=",">#{i.%s}</foreach>""",
-	"association.\""+c[2].getSimpleName()+"\"",
-	c[2].getDeclaredFields()[0].getName(), 
-	c[0].getAnnotation(PrimaryKey.class).value()
-	));
-}
-public static String select_association_by_c1(ProviderContext context){
-	Class<?>[] c = Stream.of(((ParameterizedType)Stream.of(context.getMapperType().getGenericInterfaces()).filter(type->type instanceof ParameterizedType&&((ParameterizedType)type).getRawType()==AssociationMapper.class).findFirst().get()).getActualTypeArguments()).map(t->(Class<?>)t).toArray(Class<?>[]::new);
-	return String.format("<script>%s</script>", String.format("""
-			SELECT * FROM %s WHERE %s IN <foreach collection="s" item="i" open="(" close=")" separator=",">#{i.%s}</foreach>""",
-		"association.\""+c[2].getSimpleName()+"\"",
-		c[2].getDeclaredFields()[1].getName(), 
-		c[1].getAnnotation(PrimaryKey.class).value()
-	));
-}
-public static String select_by_c0(ProviderContext context){
-	Class<?>[] c = Stream.of(((ParameterizedType)Stream.of(context.getMapperType().getGenericInterfaces()).filter(type->type instanceof ParameterizedType&&((ParameterizedType)type).getRawType()==AssociationMapper.class).findFirst().get()).getActualTypeArguments()).map(t->(Class<?>)t).toArray(Class<?>[]::new);
-	return String.format("<script>%s</script>", String.format("""
-		SELECT %s FROM %s LEFT JOIN %s ON %s = %s
-		WHERE %s IN <foreach collection="s" item="i" open="(" close=")" separator=",">#{i.%s}</foreach>""",
-	"public.\""+c[1].getSimpleName()+"\".*",
-	"public.\""+c[1].getSimpleName()+"\"",
-	"association.\""+c[2].getSimpleName()+"\"",
-	"association.\""+c[2].getSimpleName()+"\"."+c[2].getDeclaredFields()[1].getName(),
-	"public.\""+c[1].getSimpleName()+"\"."+c[1].getAnnotation(PrimaryKey.class).value(),
-	c[2].getDeclaredFields()[0].getName(),
-	c[0].getAnnotation(PrimaryKey.class).value()
-	));
-}
-public static String select_by_c1(ProviderContext context){
-	Class<?>[] c = Stream.of(((ParameterizedType)Stream.of(context.getMapperType().getGenericInterfaces()).filter(type->type instanceof ParameterizedType&&((ParameterizedType)type).getRawType()==AssociationMapper.class).findFirst().get()).getActualTypeArguments()).map(t->(Class<?>)t).toArray(Class<?>[]::new);
-	return String.format("<script>%s</script>", String.format("""
-		SELECT %s FROM %s LEFT JOIN %s ON %s = %s
-		WHERE %s IN <foreach collection="s" item="i" open="(" close=")" separator=",">#{i.%s}</foreach>""",
-	"public.\""+c[0].getSimpleName()+"\".*",
-	"public.\""+c[0].getSimpleName()+"\"",
-	"association.\""+c[2].getSimpleName()+"\"",
-	"association.\""+c[2].getSimpleName()+"\"."+c[2].getDeclaredFields()[0].getName(),
-	"public.\""+c[0].getSimpleName()+"\"."+c[0].getAnnotation(PrimaryKey.class).value(),
-	c[2].getDeclaredFields()[1].getName(),
-	c[1].getAnnotation(PrimaryKey.class).value()
-	));
-}
-}
-@Intercepts({
-@Signature(
-	type= Executor.class,
-	method = "query",
-	args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}
-)
-})
-public static class Interceptor_AssociationMapper implements Interceptor{
-
-	@Override
-	public Object intercept(Invocation invocation) throws Throwable {
-		System.out.println(invocation.getMethod().getName());
-		Stream.of(invocation.getArgs()).forEach(System.out::println);
-
-		MappedStatement ms = (MappedStatement)invocation.getArgs()[0];
-		Class<?> clz_real = ((Class<?>)((Map<?,?>)invocation.getArgs()[1]).entrySet().stream().findFirst().get().getValue());
-		String id_new = ms.getId()+"_"+clz_real.getSimpleName();
-		if(!ms.getConfiguration().hasStatement(id_new)) return invocation.proceed();
-		
-		Method method_ofprovider = SQLProvider.class.getDeclaredMethod(Arrays.asList(ms.getId().split(".")).getLast(), ProviderContext.class, Class.class);
-		Class<?> mapper = null; //Class.forName(ms.getId()...);
-		ms.getConfiguration().addMappedStatement((MappedStatement)(invocation.getArgs()[0] = new MappedStatement.Builder(
-			ms.getConfiguration(), 
-			id_new, 
-			ms.getConfiguration().getDefaultScriptingLanguageInstance()
-				.createSqlSource(
-					ms.getConfiguration(), 
-					(String)method_ofprovider.invoke(
-						null,
-						ProviderContext.class.getDeclaredConstructor().newInstance(mapper, AssociationMapper.class.getDeclaredMethod(method_ofprovider.getName(), ProviderContext.class, Class.class), ms.getDatabaseId()),
-						clz_real
-					),
-					null
-				),
-			ms.getSqlCommandType()
-		)
-		//TODO
-		.build()));
-		return invocation.proceed();
+public static String select_association_by(ProviderContext context, Class<?> c){
+	Class<?>[] cs = Stream.of(((ParameterizedType)Stream.of(context.getMapperType().getGenericInterfaces()).filter(type->type instanceof ParameterizedType&&((ParameterizedType)type).getRawType()==AssociationMapper.class).findFirst().get()).getActualTypeArguments()).map(t->(Class<?>)t).toArray(Class<?>[]::new);
+	AssociationMapper.cache_generic.put(context.getMapperType(), cs);
+	String[] format = null;
+	if(c == cs[0]){ format = new String[]{
+		"association.\""+cs[2].getSimpleName()+"\"",
+		cs[2].getDeclaredFields()[0].getName(),
+		cs[0].getAnnotation(PrimaryKey.class).value()
+	};}else if(c == cs[1]){ format = new String[]{
+		"association.\""+cs[2].getSimpleName()+"\"",
+		cs[2].getDeclaredFields()[1].getName(),
+		cs[1].getAnnotation(PrimaryKey.class).value()
+	};}else{
+		//throw new Exception();
 	}
+	return String.format("<script>%s</script>", String.format("""
+		SELECT * FROM %s WHERE %s IN <foreach collection="t" item="i" open="(" close=")" separator=",">#{i.%s}</foreach>
+	""", format));
 }
+public static String select_entity_by(ProviderContext context, Class<?> c){
+	Class<?>[] cs = Stream.of(((ParameterizedType)Stream.of(context.getMapperType().getGenericInterfaces()).filter(type->type instanceof ParameterizedType&&((ParameterizedType)type).getRawType()==AssociationMapper.class).findFirst().get()).getActualTypeArguments()).map(t->(Class<?>)t).toArray(Class<?>[]::new);
+	AssociationMapper.cache_generic.put(context.getMapperType(), cs);
+	String[] format = null;
+	if(c == cs[0]){ format = new String[]{
+		"public.\""+cs[1].getSimpleName()+"\".*",
+		"public.\""+cs[1].getSimpleName()+"\"",
+		"association.\""+cs[2].getSimpleName()+"\"",
+		"association.\""+cs[2].getSimpleName()+"\"."+cs[2].getDeclaredFields()[1].getName(),
+		"public.\""+cs[1].getSimpleName()+"\"."+cs[1].getAnnotation(PrimaryKey.class).value(),
+		cs[2].getDeclaredFields()[0].getName(),
+		cs[0].getAnnotation(PrimaryKey.class).value()
+	};}else{ format = new String[]{
+		"public.\""+cs[0].getSimpleName()+"\".*",
+		"public.\""+cs[0].getSimpleName()+"\"",
+		"association.\""+cs[2].getSimpleName()+"\"",
+		"association.\""+cs[2].getSimpleName()+"\"."+cs[2].getDeclaredFields()[0].getName(),
+		"public.\""+cs[0].getSimpleName()+"\"."+cs[0].getAnnotation(PrimaryKey.class).value(),
+		cs[2].getDeclaredFields()[1].getName(),
+		cs[1].getAnnotation(PrimaryKey.class).value()
+	};}
+	return String.format("<script>%s</script>", String.format("""
+		SELECT %s FROM %s LEFT JOIN %s ON %s = %s
+		WHERE %s IN <foreach collection="t" item="i" open="(" close=")" separator=",">#{i.%s}</foreach>
+	""", format));
+}
+
+}
+
+
 }
